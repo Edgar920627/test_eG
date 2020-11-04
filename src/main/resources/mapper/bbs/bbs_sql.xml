@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bbs">
+
+
+
+
+
+
+
+
+
+	<select id="getBbsList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+			SELECT
+				ROW_NUMBER() OVER (ORDER BY BBS_NUM DESC) RNUM,
+				 user_id, bbs_maindiv, 
+				 bbs_smalldiv, bbs_title, 
+				 bbs_explanation, 
+				 bbs_likeCount, 
+				 bbs_likeCheck, 
+				 bbs_readcount, 
+				 bbs_date, 
+				 avgPoint, 
+				 commentCount, 
+				 avgValue
+			FROM
+			    Z_BBS
+			WHERE
+				 bbs_maindiv != '공지'
+		]]>
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+
+ 
+
+
+
+
+ 
+</mapper>

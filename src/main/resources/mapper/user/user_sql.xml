@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+ 
+    <select id="selectByEmail" resultType="tody.lovely.vo.UserVO">
+        <![CDATA[
+          SELECT
+              EMAIL,
+              NAME
+          FROM
+              GO_USER
+          WHERE
+              EMAIL = #{email}       
+      ]]>
+    </select>
+    
+    
+    <select id="selectById" resultType="tody.lovely.vo.UserVO">
+        <![CDATA[
+          SELECT
+              *
+          FROM
+              GO_USER
+          WHERE
+              ID = #{id}       
+      ]]>
+    </select>
+
+    
+    
+    <insert id="register">
+        <![CDATA[
+            INSERT INTO GO_USER
+            (
+            	IDX,
+                EMAIL,
+                ID,
+                NAME,
+                PASSWORD,
+                REGDATE
+            )
+            VALUES
+            (
+            	SEQ_GO_USER_IDX.NEXTVAL,
+                #{email},
+                #{id},
+                #{name},
+                #{pw},
+                SYSDATE
+            )
+        ]]>
+    </insert>
+ 
+</mapper>
+

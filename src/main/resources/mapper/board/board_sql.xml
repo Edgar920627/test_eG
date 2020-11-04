@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+
+
+
+
+	<select id="excelList" parameterType="tody.prj.vo.BoardVO" resultType="tody.prj.vo.BoardVO">
+	
+		<![CDATA[
+			SELECT
+				ROW_NUMBER() OVER (ORDER BY IDX DESC) RNUM,
+			    IDX,
+			    TITLE,
+			    HIT_CNT,
+			    CREA_DATE,
+			    CREA_ID
+			FROM
+			    one_board
+			WHERE
+				DEL_CHK = 'N'
+		]]>
+
+	</select>
+
+
+
+
+
+	<select id="selectBoardList" parameterType="hashmap" resultType="hashmap">
+		<include refid="common.pagingPre"/> 
+		<![CDATA[
+			SELECT
+				ROW_NUMBER() OVER (ORDER BY IDX DESC) RNUM,
+			    IDX,
+			    TITLE,
+			    HIT_CNT,
+			    CREA_DATE,
+			    CREA_ID
+			FROM
+			    one_board
+			WHERE
+				DEL_CHK = 'N'
+		]]>
+		<include refid="common.pagingPost"/> 
+	</select>
+	
+
+    
+    <insert id="insertBoard" parameterType="hashmap">
+        <![CDATA[
+            INSERT INTO one_board
+            (
+            	IDX,
+                TITLE,
+                CONTENTS,
+                HIT_CNT,
+                DEL_CHK,
+                CREA_DATE,
+                CREA_ID
+            )
+            VALUES
+            (
+            	SEQ_ONE_BOARD_IDX.NEXTVAL,
+                #{ title},
+                #{ contents},
+                0,
+                'N',
+                SYSDATE,
+                #{ crea_id}
+            )
+        ]]>
+    </insert>
+
+
+
+    <select id="detailBoard" resultType="hashmap">
+        <![CDATA[
+            SELECT
+                IDX,
+                TITLE,
+                CONTENTS,
+                HIT_CNT,
+                CREA_ID,
+ 				CREA_DATE
+            FROM
+                one_board
+            WHERE
+                IDX = #{ idx}
+        ]]>
+    </select>
+
+    <update id="updateHitBoard">
+        <![CDATA[
+            UPDATE
+                one_board
+            SET
+                HIT_CNT = HIT_CNT + 1
+            WHERE
+                IDX = #{ idx}
+        ]]>
+    </update>
+
+
+
+    <update id="updateBoard" parameterType="hashmap">
+        <![CDATA[
+            UPDATE
+                one_board
+            SET
+                TITLE = #{title},
+                CONTENTS = #{contents}
+            WHERE
+                IDX = #{idx}
+                and
+                CREA_ID = #{crea_id}
+        ]]>
+    </update>
+
+
+
+    <update id="deleteBoard">
+        <![CDATA[
+            UPDATE
+                one_board
+            SET
+                DEL_CHK = 'Y'
+            WHERE
+                IDX = #{ idx}
+        ]]>
+    </update>
+
+
+<select id="countBoardList" resultType="Integer">
+    <![CDATA[
+        SELECT
+            count(*)
+        FROM
+            one_board
+        WHERE
+            DEL_CHK='N'
+    ]]>
+</select>
+
+
+
+
+ 
+</mapper>
